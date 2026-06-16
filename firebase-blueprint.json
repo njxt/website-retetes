@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "Recipe": {
+      "title": "Recipe",
+      "description": "A single recipe.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "prepTime": { "type": "integer" },
+        "cookTime": { "type": "integer" },
+        "servings": { "type": "integer" },
+        "difficulty": { "type": "string" },
+        "calories": { "type": "integer" },
+        "protein": { "type": "integer" },
+        "carbs": { "type": "integer" },
+        "fat": { "type": "integer" },
+        "ingredients": { "type": "array", "items": { "type": "string" } },
+        "instructions": { "type": "array", "items": { "type": "string" } },
+        "isFavorite": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "description", "category"]
+    }
+  },
+  "firestore": {
+    "recipes/{recipeId}": {
+      "schema": "Recipe",
+      "description": "Stores recipes"
+    }
+  }
+}

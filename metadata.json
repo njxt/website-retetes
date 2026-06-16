@@ -1,0 +1,6 @@
+{
+  "name": "Bespoke Culinary Studio",
+  "description": "Un studio de rețete ultra-minimalist, curat, cu panou de administrare integrat pentru adăugare și editare de rețete culinare.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

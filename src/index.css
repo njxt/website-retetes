@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+}
+
+/* Custom gorgeous mesh backdrop like in the prompt image */
+body {
+  font-family: var(--font-sans);
+  background-color: #fcfbfa; /* Off-white background */
+  overflow-x: hidden;
+  color: #1c1917; /* Warm stone-900 */
+}
+
+/* Custom ambient mesh background blur */
+.mesh-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.12;
+  z-index: -10;
+  pointer-events: none;
+}
+
+/* Hide scrollbar in category buttons if they exceed width on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
