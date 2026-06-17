@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowLeft, Clock, Users, Flame, Check, Heart, X, Info } from "lucide-react";
+import { ArrowLeft, Clock, Users, Flame, Check, Heart, X, Info, Printer } from "lucide-react";
 import { Recipe } from "../types";
 
 interface RecipeDetailProps {
@@ -76,7 +76,14 @@ export default function RecipeDetail({ recipe, onBack, onToggleFavorite }: Recip
           <span className="inline sm:hidden">Înapoi</span>
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 print:hidden">
+          <button
+            onClick={() => window.print()}
+            className="flex h-[44px] w-[44px] sm:h-9 sm:w-9 items-center justify-center rounded-full border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 shadow-xs hover:border-stone-400 dark:hover:border-stone-500 hover:bg-stone-50 dark:hover:bg-stone-800 transition-all active:scale-95 animate-fade-in"
+            title="Printează Rețeta"
+          >
+            <Printer className="h-4 w-4 sm:h-4 sm:w-4" />
+          </button>
           {/* Favorite button */}
           <button
             onClick={() => onToggleFavorite(recipe.id)}
