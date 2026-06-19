@@ -281,6 +281,13 @@ export default function AdminPanel({ recipes, onSaveRecipe, onDeleteRecipe, onIm
         <div className="flex gap-2">
           {activeTab === "list" && (
             <>
+              <input 
+                type="file" 
+                accept=".json"
+                ref={fileInputRef} 
+                onChange={handleImportFile} 
+                className="hidden" 
+              />
               <button
                 onClick={() => fileInputRef.current?.click()}
                 className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 px-4 py-2 text-xs font-semibold shadow-sm cursor-pointer transition-all active:scale-95"

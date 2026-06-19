@@ -552,14 +552,16 @@ export default function App() {
                       animate="show"
                       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
                     >
-                      {filteredRecipes.map((recipe) => (
-                        <RecipeCard
-                          key={recipe.id}
-                          recipe={recipe}
-                          onViewDetails={handleViewDetails}
-                          onToggleFavorite={handleToggleFavorite}
-                        />
-                      ))}
+                      <AnimatePresence mode="popLayout">
+                        {filteredRecipes.map((recipe) => (
+                          <RecipeCard
+                            key={recipe.id}
+                            recipe={recipe}
+                            onViewDetails={handleViewDetails}
+                            onToggleFavorite={handleToggleFavorite}
+                          />
+                        ))}
+                      </AnimatePresence>
                     </motion.div>
                   )}
                 </AnimatePresence>

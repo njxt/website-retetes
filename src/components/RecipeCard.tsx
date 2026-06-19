@@ -27,7 +27,19 @@ export default function RecipeCard({ recipe, onViewDetails, onToggleFavorite }: 
   };
 
   return (
-    <div className="relative rounded-3xl overflow-hidden bg-rose-50 dark:bg-rose-950/20">
+    <motion.div 
+      layout
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.9, y: 20 }
+      }}
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="relative rounded-3xl overflow-hidden bg-rose-50 dark:bg-rose-950/20"
+    >
       {/* Background layer shown when swiping */}
       <div className="absolute inset-0 flex items-center justify-between px-8 opacity-60 pointer-events-none">
         <Heart className={`h-8 w-8 ${recipe.isFavorite ? "fill-rose-500 text-rose-500" : "text-rose-400"}`} />
@@ -35,10 +47,6 @@ export default function RecipeCard({ recipe, onViewDetails, onToggleFavorite }: 
       </div>
 
       <motion.div
-        layout
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95 }}
         whileHover={{ y: -6, scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -137,6 +145,6 @@ export default function RecipeCard({ recipe, onViewDetails, onToggleFavorite }: 
           </div>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
