@@ -1,7 +1,7 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
-  Plus, Trash2, Edit2, AlertCircle, Save, X, Eye, ChevronRight, Play, Camera
+  Plus, Trash2, Edit2, AlertCircle, Save, X, Eye, ChevronRight, Play, Camera, Download, Upload
 } from "lucide-react";
 import { Recipe, RecipeDifficulty } from "../types";
 import RecipeCard from "./RecipeCard";
@@ -10,12 +10,14 @@ interface AdminPanelProps {
   recipes: Recipe[];
   onSaveRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (id: string) => void;
+  onImportRecipes: (recipes: Recipe[]) => void;
   onClose: () => void;
 }
 
-export default function AdminPanel({ recipes, onSaveRecipe, onDeleteRecipe, onClose }: AdminPanelProps) {
+export default function AdminPanel({ recipes, onSaveRecipe, onDeleteRecipe, onImportRecipes, onClose }: AdminPanelProps) {
   const [activeTab, setActiveTab] = useState<"list" | "form">("list");
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form Fields
   const [title, setTitle] = useState("");
@@ -78,6 +80,40 @@ export default function AdminPanel({ recipes, onSaveRecipe, onDeleteRecipe, onCl
     setIngredients([""]);
     setInstructions([""]);
     setFormErrors([]);
+  };
+
+  const handleExportBackup = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(recipes, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", "roberts_cookbook_backup.json");
+    document.body.appendChild(downloadAnchorNode); 
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const handleImportFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target?.result as string);
+        if (Array.isArray(imported)) {
+          onImportRecipes(imported);
+          alert("Rețete importate cu succes!");
+        } else {
+          alert("Fișierul JSON trebuie să conțină un array de rețete!");
+        }
+      } catch (err) {
+        alert("Eroare la parsarea fișierului JSON!");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleCreateNew = () => {
@@ -244,14 +280,32 @@ export default function AdminPanel({ recipes, onSaveRecipe, onDeleteRecipe, onCl
 
         <div className="flex gap-2">
           {activeTab === "list" && (
-            <button
-              onClick={handleCreateNew}
-              className="inline-flex items-center gap-1.5 rounded-full bg-stone-900 dark:bg-stone-100 hover:bg-stone-800 dark:hover:bg-white text-white dark:text-stone-900 px-4 sm:px-4 py-3 sm:py-2 text-sm sm:text-xs font-semibold shadow-md cursor-pointer transition-all active:scale-95"
-              id="admin-create-new-btn"
-            >
-              <Plus className="h-4 w-4" />
-              Adaugă Rețetă
-            </button>
+            <>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 px-4 py-2 text-xs font-semibold shadow-sm cursor-pointer transition-all active:scale-95"
+                title="Importă din Fișier"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Importă Backup</span>
+              </button>
+              <button
+                onClick={handleExportBackup}
+                className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 px-4 py-2 text-xs font-semibold shadow-sm cursor-pointer transition-all active:scale-95"
+                title="Descarcă Backup"
+              >
+                <Download className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Exportă Backup</span>
+              </button>
+              <button
+                onClick={handleCreateNew}
+                className="inline-flex items-center gap-1.5 rounded-full bg-stone-900 dark:bg-stone-100 hover:bg-stone-800 dark:hover:bg-white text-white dark:text-stone-900 px-4 sm:px-4 py-3 sm:py-2 text-sm sm:text-xs font-semibold shadow-md cursor-pointer transition-all active:scale-95"
+                id="admin-create-new-btn"
+              >
+                <Plus className="h-4 w-4" />
+                Adaugă Rețetă
+              </button>
+            </>
           )}
 
           <button

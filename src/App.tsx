@@ -103,6 +103,19 @@ export default function App() {
     }
   };
 
+  const handleImportRecipes = async (importedRecipes: Recipe[]) => {
+    try {
+      const dbPromises = importedRecipes.map(r => setDoc(doc(db, "recipes", r.id), r));
+      await Promise.all(dbPromises);
+    } catch (err) {
+      console.error("Error bulk saving recipes to Firestore:", err);
+    }
+    const map = new Map(recipes.map(r => [r.id, r]));
+    importedRecipes.forEach(r => map.set(r.id, r));
+    const merged = Array.from(map.values());
+    handleSaveRecipes(merged);
+  };
+
   // Toggle favorite helper
   const handleToggleFavorite = (id: string, e?: MouseEvent) => {
     if (e) e.stopPropagation();
@@ -569,6 +582,7 @@ export default function App() {
               recipes={recipes}
               onSaveRecipe={handleSaveRecipe}
               onDeleteRecipe={handleDeleteRecipe}
+              onImportRecipes={handleImportRecipes}
               onClose={handleBackToCatalog}
             />
           )}
